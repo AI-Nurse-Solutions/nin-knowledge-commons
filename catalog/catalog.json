@@ -1,0 +1,11 @@
+{
+  "schema_version": "0.1",
+  "status": "empty-preview",
+  "authority": "Knowledge Packs are authoritative; this catalog is a rebuildable projection.",
+  "publication_scope": {
+    "data_class": ["D0"],
+    "risk_tier": ["Green", "bounded Yellow"],
+    "orange_publication": "held"
+  },
+  "packs": []
+}

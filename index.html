@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10213f">
+  <meta name="description" content="NIN Knowledge Commons — a proposed nurse-led, local-first catalog of governed Knowledge Packs.">
+  <title>NIN Knowledge Commons</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --navy: #10213f;
+      --navy-2: #172f56;
+      --teal: #0f766e;
+      --teal-dark: #0b5c56;
+      --gold: #b7791f;
+      --cream: #f8f5ee;
+      --paper: #ffffff;
+      --ink: #142033;
+      --muted: #526173;
+      --line: #d7dee8;
+      --focus: #ffbf47;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--cream);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    a { color: var(--teal-dark); }
+    a:hover { text-decoration-thickness: 2px; }
+    a:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+    .skip-link {
+      position: absolute;
+      left: 1rem;
+      top: -5rem;
+      z-index: 100;
+      padding: .75rem 1rem;
+      color: var(--navy);
+      background: var(--focus);
+      font-weight: 800;
+    }
+    .skip-link:focus { top: 1rem; }
+    .wrap { width: min(calc(100% - 2rem), var(--max)); margin-inline: auto; }
+    header {
+      color: #fff;
+      background: var(--navy);
+      border-bottom: 4px solid var(--gold);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-block: .75rem;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: .7rem;
+      min-height: 44px;
+      color: #fff;
+      font-weight: 850;
+      text-decoration: none;
+      letter-spacing: .01em;
+    }
+    .lamp {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      color: var(--navy);
+      background: var(--focus);
+      font-weight: 900;
+    }
+    nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .35rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    nav a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+      padding: .55rem .75rem;
+      color: #fff;
+      border-radius: 7px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    nav a:hover { background: rgba(255,255,255,.12); }
+    .status {
+      padding: .8rem 0;
+      color: #332406;
+      background: #fff1c9;
+      border-bottom: 1px solid #e0bd5d;
+      font-weight: 700;
+    }
+    .status strong { color: #6d4600; }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(3.5rem, 8vw, 7rem) 0;
+      color: #fff;
+      background:
+        radial-gradient(circle at 90% 15%, rgba(15,118,110,.65), transparent 32rem),
+        linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 62%, #0d4f4a 100%);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 22rem;
+      height: 22rem;
+      right: -8rem;
+      bottom: -11rem;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 50%;
+      box-shadow: 0 0 0 3.5rem rgba(255,255,255,.025), 0 0 0 7rem rgba(255,255,255,.02);
+    }
+    .eyebrow {
+      margin: 0 0 .7rem;
+      color: #7fe0d7;
+      font-size: .85rem;
+      font-weight: 850;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3 { line-height: 1.15; text-wrap: balance; }
+    h1 {
+      max-width: 850px;
+      margin: 0;
+      font-size: clamp(2.5rem, 7vw, 5.4rem);
+      letter-spacing: -.045em;
+    }
+    .lede {
+      max-width: 760px;
+      margin: 1.35rem 0 0;
+      color: #dbe8f4;
+      font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+      padding: .8rem 1.1rem;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      font-weight: 850;
+      text-decoration: none;
+    }
+    .button-primary { color: var(--navy); background: var(--focus); }
+    .button-secondary { color: #fff; border-color: #90adae; background: rgba(255,255,255,.06); }
+    main section { padding: clamp(3.2rem, 7vw, 6rem) 0; }
+    .section-head { max-width: 780px; margin-bottom: 2rem; }
+    .section-head h2 { margin: 0 0 .8rem; color: var(--navy); font-size: clamp(1.9rem, 4vw, 3.1rem); }
+    .section-head p { margin: 0; color: var(--muted); font-size: 1.08rem; }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .card {
+      min-width: 0;
+      padding: 1.35rem;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-top: 5px solid var(--teal);
+      border-radius: 10px;
+      box-shadow: 0 8px 28px rgba(16,33,63,.07);
+    }
+    .card h3 { margin: 0 0 .55rem; color: var(--navy); font-size: 1.25rem; }
+    .card p { margin: 0; color: var(--muted); }
+    .lane { color: var(--gold); font-size: .8rem; font-weight: 900; letter-spacing: .11em; text-transform: uppercase; }
+    .principles { background: var(--paper); border-block: 1px solid var(--line); }
+    .quote-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    blockquote {
+      margin: 0;
+      padding: 1.35rem;
+      color: var(--navy);
+      background: #eef7f6;
+      border-left: 5px solid var(--teal);
+      border-radius: 6px;
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+    .state-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .state-panel { padding: 1.4rem; border-radius: 10px; }
+    .state-panel h3 { margin-top: 0; }
+    .exists { background: #e9f7f2; border: 1px solid #9ecfbe; }
+    .deferred { background: #fff4dc; border: 1px solid #e2bd66; }
+    .state-panel li + li { margin-top: .45rem; }
+    .catalog {
+      color: #fff;
+      background: var(--navy);
+    }
+    .catalog .section-head h2, .catalog .section-head p { color: #fff; }
+    .empty {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem;
+      border: 1px solid #64809e;
+      border-radius: 10px;
+      background: rgba(255,255,255,.06);
+    }
+    .empty h3 { margin: 0 0 .35rem; }
+    .empty p { margin: 0; color: #dbe8f4; }
+    footer { padding: 2rem 0; color: #dbe8f4; background: #09162b; }
+    footer a { color: #8fe2d8; }
+    footer p { margin: .25rem 0; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: .25rem .65rem; }
+    .footer-links a {
+      display: inline-flex;
+      align-items: center;
+      min-width: 44px;
+      min-height: 44px;
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .quote-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 680px) {
+      .nav { align-items: flex-start; flex-direction: column; }
+      nav, nav ul { width: 100%; }
+      nav a { flex: 1; }
+      .grid, .state-grid { grid-template-columns: 1fr; }
+      .empty { grid-template-columns: 1fr; }
+      .empty .button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="index.html" aria-label="NIN Knowledge Commons home">
+        <span class="lamp" aria-hidden="true">N</span>
+        <span>NIN Knowledge Commons</span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <ul>
+          <li><a href="#libraries">Libraries</a></li>
+          <li><a href="DOCTRINE.md">Doctrine</a></li>
+          <li><a href="PLAYBOOK.md">Playbook</a></li>
+          <li><a href="catalog/catalog.json">Catalog data</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="status" role="status">
+    <div class="wrap"><strong>Repository scaffold:</strong> the catalog is empty. No Knowledge Packs or hosted retrieval service are operational yet.</div>
+  </div>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap">
+        <p class="eyebrow">Where Nightingale Meets Neural Net</p>
+        <h1 id="hero-title">Knowledge nurses can carry, inspect, and govern.</h1>
+        <p class="lede">A proposed local-first catalog of portable, versioned Knowledge Packs—designed to preserve provenance, creator rights, cultural context, and human authority.</p>
+        <div class="actions">
+          <a class="button button-primary" href="DOCTRINE.md">Review the doctrine</a>
+          <a class="button button-secondary" href="PLAYBOOK.md">Read the operating playbook</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="libraries" aria-labelledby="libraries-title">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">One fabric, four views</p>
+          <h2 id="libraries-title">A shared standard for nursing knowledge</h2>
+          <p>Every lane uses the same package, provenance, review, licensing, versioning, and retirement model. The lanes organize discovery; they do not create competing sources of truth.</p>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <p class="lane">Learn</p>
+            <h3>Learning libraries</h3>
+            <p>Study guides, concept maps, quizzes, illustrations, and multilingual explainers—without claiming grading, competency, or faculty authority.</p>
+          </article>
+          <article class="card">
+            <p class="lane">Practice</p>
+            <h3>Professional libraries</h3>
+            <p>Evidence-reading packs, generic specialty references, and reflective tools—not local policy or patient-specific guidance.</p>
+          </article>
+          <article class="card">
+            <p class="lane">Lead</p>
+            <h3>Leadership libraries</h3>
+            <p>Huddle tools, educator guides, implementation lessons, and professional wisdom—bounded from institutional authorization.</p>
+          </article>
+          <article class="card">
+            <p class="lane">Build</p>
+            <h3>Creator libraries</h3>
+            <p>Browser-local dashboards, designs, templates, and synthetic simulations—without implying technical, clinical, or educational approval.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="principles" aria-labelledby="principles-title">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Governance spine</p>
+          <h2 id="principles-title">Portable knowledge. Explicit authority.</h2>
+        </div>
+        <div class="quote-grid">
+          <blockquote>Content packages are the source of truth. Search, vector, and graph indexes are disposable derivatives.</blockquote>
+          <blockquote>Contributors propose. Reviewers verify. Institutions authorize. Nurses steward.</blockquote>
+          <blockquote>Inclusion means governed availability—not endorsement, certification, clinical validation, or permission to change practice.</blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="state-title">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Honest status</p>
+          <h2 id="state-title">What exists—and what does not</h2>
+          <p>This first baseline establishes a repository and public documentation surface. It does not launder planned capabilities into present-tense claims.</p>
+        </div>
+        <div class="state-grid">
+          <article class="state-panel exists">
+            <h3>Present now</h3>
+            <ul>
+              <li>Doctrine and operational playbook</li>
+              <li>Public governance and safety boundaries</li>
+              <li>Empty portable catalog projections</li>
+              <li>Static, browser-readable holding page</li>
+              <li>Deterministic repository verification</li>
+            </ul>
+          </article>
+          <article class="state-panel deferred">
+            <h3>Not active</h3>
+            <ul>
+              <li>Published or accepted Knowledge Packs</li>
+              <li>Reviewer council or institutional authority</li>
+              <li>Hosted RAG, vector search, or graph traversal</li>
+              <li>Accounts, payments, marketplace, or school tenants</li>
+              <li>PHI, clinical decision, competency, or autonomous action</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="catalog" aria-labelledby="catalog-title">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Catalog preview</p>
+          <h2 id="catalog-title">No packs are published yet</h2>
+          <p>The first accepted pack must pass declared rights, provenance, EDENA, review, integrity, lifecycle, and public-scope gates. Empty is safer than invented availability.</p>
+        </div>
+        <div class="empty">
+          <div>
+            <h3>Current catalog: 0 packs</h3>
+            <p>The machine-readable catalog is public and intentionally empty.</p>
+          </div>
+          <a class="button button-primary" href="catalog/catalog.json">Inspect catalog.json</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p><strong>NIN Knowledge Commons</strong> · Proposed public catalog for the Nurse AI OS Knowledge Fabric.</p>
+      <p class="footer-links"><a href="README.md">Repository guide</a><a href="GOVERNANCE.md">Governance</a><a href="SAFETY.md">Safety</a><a href="SECURITY.md">Security</a></p>
+      <p>Agents propose. Humans judge. Nurses steward.</p>
+    </div>
+  </footer>
+</body>
+</html>

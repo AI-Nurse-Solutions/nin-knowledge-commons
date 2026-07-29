@@ -1,0 +1,20 @@
+name: Verify repository baseline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
+      - name: Run fail-closed repository verifier
+        run: python3 scripts/verify_repository.py
+      - name: Run regression contracts
+        run: python3 -m unittest discover -s tests -v
