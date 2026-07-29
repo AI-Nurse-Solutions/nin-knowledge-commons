@@ -30,8 +30,8 @@ class KnowledgeCommonsRepositoryTests(unittest.TestCase):
         self.assertEqual(catalog["publication_scope"]["data_class"], ["D0"])
         self.assertEqual(catalog["publication_scope"]["orange_publication"], "held")
 
-    def test_custom_domain_declaration_is_deferred(self) -> None:
-        self.assertFalse((ROOT / "CNAME").exists())
+    def test_domain_declaration_is_exact(self) -> None:
+        self.assertEqual((ROOT / "CNAME").read_text(encoding="utf-8").strip(), "commons.nurse-ai-os.org")
 
     def test_doctrine_preserves_package_and_authority_maxims(self) -> None:
         doctrine = (ROOT / "DOCTRINE.md").read_text(encoding="utf-8")

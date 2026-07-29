@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 REQUIRED = (
     ".nojekyll",
+    "CNAME",
     "CONTRIBUTING.md",
     "DOCTRINE.md",
     "GOVERNANCE.md",
@@ -58,9 +59,9 @@ def check_required_files() -> None:
         fail(f"missing required files: {missing}")
 
 
-def check_custom_domain_gate() -> None:
-    if (ROOT / "CNAME").exists():
-        fail("CNAME must remain absent until the custom-domain gate")
+def check_cname() -> None:
+    if read("CNAME").strip() != "commons.nurse-ai-os.org":
+        fail("CNAME must contain exactly commons.nurse-ai-os.org")
 
 
 def check_catalog() -> None:
@@ -172,7 +173,7 @@ def check_sensitive_patterns() -> int:
 def main() -> int:
     try:
         check_required_files()
-        check_custom_domain_gate()
+        check_cname()
         check_catalog()
         links = check_links()
         check_governance_contract()
