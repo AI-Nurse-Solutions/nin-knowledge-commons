@@ -87,7 +87,7 @@ python3 scripts/verify_repository.py
 python3 -m unittest discover -s tests -v
 ```
 
-The verifier checks required files, the exact custom-domain declaration, JSON/JSONL validity, repository-contained links, empty-catalog honesty, core governance language, and common secret/identifier patterns.
+The verifier checks required files, custom-domain deferral, JSON/JSONL validity, repository-contained links, empty-catalog honesty, core governance language, and common secret/identifier patterns.
 
 ## Planned publication domains
 
@@ -96,7 +96,7 @@ commons.nurse-ai-os.org       public catalog
 packs.nurse-ai-os.org         future version-stable pack distribution
 ```
 
-The `CNAME` file reserves the intended Pages hostname inside this repository. GitHub Pages enablement, DNS binding, certificate issuance, and live verification remain separate release gates.
+The `CNAME` file is intentionally absent while the default GitHub Pages endpoint is enabled and verified. At the later custom-domain gate, GitHub will create that file when `commons.nurse-ai-os.org` is saved in Pages settings. Domain verification, repository association, DNS binding, certificate issuance, and live verification remain separate controlled steps.
 
 ## Source lineage
 
