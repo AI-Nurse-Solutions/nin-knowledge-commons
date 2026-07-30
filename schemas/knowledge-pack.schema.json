@@ -1,0 +1,572 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://commons.nurse-ai-os.org/schemas/knowledge-pack.schema.json",
+  "title": "NIN Knowledge Pack manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "pack_id",
+    "namespace",
+    "title",
+    "version",
+    "state",
+    "lane",
+    "role",
+    "language",
+    "data_class",
+    "risk_tier",
+    "action_modes",
+    "description",
+    "intended_audiences",
+    "permitted_uses",
+    "prohibited_uses",
+    "authority",
+    "creator",
+    "publisher",
+    "license",
+    "rights_status",
+    "artifacts",
+    "sources_path",
+    "review_status",
+    "review_records",
+    "ai_disclosure",
+    "limitations",
+    "lifecycle",
+    "relationships",
+    "integrity"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1-draft"
+    },
+    "pack_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "namespace": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "state": {
+      "enum": [
+        "draft",
+        "submitted",
+        "quarantined",
+        "under_review",
+        "changes_requested",
+        "accepted_for_scope",
+        "published",
+        "superseded",
+        "retired",
+        "recalled",
+        "withdrawn"
+      ]
+    },
+    "lane": {
+      "enum": [
+        "Learn",
+        "Practice",
+        "Lead",
+        "Build"
+      ]
+    },
+    "role": {
+      "enum": [
+        "reference-pack",
+        "community-pack",
+        "institutional-pack"
+      ]
+    },
+    "language": {
+      "type": "string",
+      "pattern": "^[a-z]{2,3}(?:-[A-Z]{2})?$"
+    },
+    "data_class": {
+      "enum": [
+        "D0",
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ]
+    },
+    "risk_tier": {
+      "enum": [
+        "Green",
+        "Yellow",
+        "Orange",
+        "Red-P",
+        "Red-E"
+      ]
+    },
+    "action_modes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "Observe",
+          "Draft",
+          "Recommend",
+          "Prepare Action",
+          "Act With Approval",
+          "Constrained Autonomy"
+        ]
+      }
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "intended_audiences": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "permitted_uses": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "prohibited_uses": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clinical",
+        "institutional",
+        "certification"
+      ],
+      "properties": {
+        "clinical": {
+          "const": "none"
+        },
+        "institutional": {
+          "const": "none"
+        },
+        "certification": {
+          "const": "none"
+        }
+      }
+    },
+    "locality": {
+      "type": "string",
+      "minLength": 1
+    },
+    "jurisdiction": {
+      "type": "string",
+      "minLength": 1
+    },
+    "creator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "display_name",
+        "role",
+        "rights_holder"
+      ],
+      "properties": {
+        "display_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rights_holder": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "publisher": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "display_name",
+        "status"
+      ],
+      "properties": {
+        "display_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "not-published",
+            "candidate-only",
+            "published"
+          ]
+        }
+      }
+    },
+    "license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spdx_id",
+        "path"
+      ],
+      "properties": {
+        "spdx_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*\\.\\.)[^\\\\]+$"
+        }
+      }
+    },
+    "rights_status": {
+      "enum": [
+        "draft-rights-review-pending",
+        "rights-reviewed"
+      ]
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "artifact_id",
+          "content_unit_id",
+          "path",
+          "title",
+          "artifact_type",
+          "language"
+        ],
+        "properties": {
+          "artifact_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+          },
+          "content_unit_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+          },
+          "path": {
+            "type": "string",
+            "pattern": "^content/(?!.*\\.\\.)[^\\\\]+\\.md$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "artifact_type": {
+            "enum": [
+              "orientation",
+              "lesson",
+              "practice-exercise",
+              "glossary",
+              "assessment"
+            ]
+          },
+          "language": {
+            "type": "string",
+            "pattern": "^[a-z]{2,3}(?:-[A-Z]{2})?$"
+          }
+        }
+      }
+    },
+    "sources_path": {
+      "const": "sources/sources.jsonl"
+    },
+    "review_status": {
+      "enum": [
+        "not-reviewed",
+        "review-requested",
+        "changes-requested",
+        "reviewed-for-stated-scope"
+      ]
+    },
+    "review_records": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^reviews/(?!.*\\.\\.)[^\\\\]+\\.ya?ml$"
+      }
+    },
+    "ai_disclosure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "used",
+        "purposes",
+        "human_verification_status"
+      ],
+      "properties": {
+        "used": {
+          "type": "boolean"
+        },
+        "purposes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "human_verification_status": {
+          "enum": [
+            "pending",
+            "partial",
+            "complete"
+          ]
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "created_at",
+        "published_at",
+        "supersedes",
+        "retirement_notice",
+        "recall_notice"
+      ],
+      "properties": {
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "published_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "supersedes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "retirement_notice": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "recall_notice": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "relationships": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "translations",
+        "derived_from",
+        "prerequisites",
+        "related_packs"
+      ],
+      "properties": {
+        "translations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "pack_id",
+              "version",
+              "source_digest"
+            ],
+            "properties": {
+              "pack_id": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+              },
+              "version": {
+                "type": "string",
+                "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+              },
+              "source_digest": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              }
+            }
+          }
+        },
+        "derived_from": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+          }
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+          }
+        },
+        "related_packs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+          }
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "checksums_path",
+        "candidate_digest"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "sha256"
+        },
+        "checksums_path": {
+          "const": "CHECKSUMS.sha256"
+        },
+        "candidate_digest": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "published"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "publisher": {
+            "properties": {
+              "status": {
+                "const": "published"
+              }
+            }
+          },
+          "review_status": {
+            "const": "reviewed-for-stated-scope"
+          },
+          "review_records": {
+            "minItems": 1
+          },
+          "rights_status": {
+            "const": "rights-reviewed"
+          },
+          "lifecycle": {
+            "properties": {
+              "published_at": {
+                "type": "string"
+              }
+            }
+          },
+          "integrity": {
+            "properties": {
+              "candidate_digest": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "data_class": {
+            "const": "D0"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "risk_tier": {
+            "enum": [
+              "Green",
+              "Yellow"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "enum": [
+              "draft",
+              "submitted",
+              "under_review",
+              "changes_requested"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "publisher": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "not-published",
+                  "candidate-only"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

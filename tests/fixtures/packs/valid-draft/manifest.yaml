@@ -1,0 +1,70 @@
+schema_version: 0.1-draft
+pack_id: nin.test.learn.ai-literacy
+namespace: nin.test.learn.ai-literacy
+title: Test AI Literacy Pack
+version: 0.1.0-draft.1
+state: draft
+lane: Learn
+role: reference-pack
+language: en
+data_class: D0
+risk_tier: Green
+action_modes:
+  - Observe
+  - Draft
+description: Synthetic validator fixture for a non-clinical AI-literacy Pack.
+intended_audiences:
+  - student-nurse
+permitted_uses:
+  - Test deterministic Pack validation.
+prohibited_uses:
+  - Clinical decision support or patient-specific guidance.
+authority:
+  clinical: none
+  institutional: none
+  certification: none
+locality: Global
+jurisdiction: Educational; no institutional authority
+creator:
+  display_name: Test Creator
+  role: fixture author
+  rights_holder: Test Creator
+publisher:
+  display_name: NIN Knowledge Commons
+  status: not-published
+license:
+  spdx_id: CC-BY-4.0
+  path: LICENSE
+rights_status: draft-rights-review-pending
+artifacts:
+  - artifact_id: artifact.test.orientation
+    content_unit_id: unit.test.orientation
+    path: content/01-orientation.md
+    title: Test orientation
+    artifact_type: orientation
+    language: en
+sources_path: sources/sources.jsonl
+review_status: not-reviewed
+review_records: []
+ai_disclosure:
+  used: true
+  purposes:
+    - Synthetic fixture generation.
+  human_verification_status: pending
+limitations:
+  - Synthetic fixture; not educational guidance.
+lifecycle:
+  created_at: '2026-07-29T00:00:00Z'
+  published_at: null
+  supersedes: null
+  retirement_notice: null
+  recall_notice: null
+relationships:
+  translations: []
+  derived_from: []
+  prerequisites: []
+  related_packs: []
+integrity:
+  algorithm: sha256
+  checksums_path: CHECKSUMS.sha256
+  candidate_digest: null

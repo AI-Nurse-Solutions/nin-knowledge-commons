@@ -1,0 +1,222 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://commons.nurse-ai-os.org/schemas/chunk.schema.json",
+  "title": "Deterministic Knowledge Pack chunk",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "chunk_id",
+    "content_unit_id",
+    "pack_id",
+    "pack_version",
+    "candidate_digest",
+    "parser_contract",
+    "chunker_version",
+    "namespace",
+    "artifact_id",
+    "artifact_path",
+    "artifact_digest",
+    "section_path",
+    "unit_source_order",
+    "part_index",
+    "citation_locator",
+    "unit_text_digest",
+    "text",
+    "language",
+    "lane",
+    "data_class",
+    "risk_tier",
+    "action_modes",
+    "review_status",
+    "lifecycle_state",
+    "license",
+    "permitted_uses",
+    "prohibited_uses",
+    "authority",
+    "source_refs",
+    "chunk_digest"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1-draft"
+    },
+    "chunk_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "content_unit_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "pack_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "pack_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "candidate_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "parser_contract": {
+      "const": "markdown-front-matter-sections-v1"
+    },
+    "chunker_version": {
+      "const": "structural-scalar-1600-v1"
+    },
+    "namespace": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "artifact_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "artifact_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifact_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "section_path": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "unit_source_order": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "part_index": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "citation_locator": {
+      "type": "string",
+      "pattern": "^ninpack:[A-Za-z0-9][A-Za-z0-9._-]*@[A-Za-z0-9][A-Za-z0-9._-]*/[A-Za-z0-9][A-Za-z0-9._-]*#[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "unit_text_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1600
+    },
+    "language": {
+      "type": "string",
+      "minLength": 1
+    },
+    "lane": {
+      "enum": [
+        "Learn",
+        "Practice",
+        "Lead",
+        "Build"
+      ]
+    },
+    "data_class": {
+      "enum": [
+        "D0",
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ]
+    },
+    "risk_tier": {
+      "enum": [
+        "Green",
+        "Yellow",
+        "Orange",
+        "Red-P",
+        "Red-E"
+      ]
+    },
+    "action_modes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "Observe",
+          "Draft",
+          "Recommend",
+          "Prepare Action",
+          "Act With Approval",
+          "Constrained Autonomy"
+        ]
+      }
+    },
+    "review_status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "lifecycle_state": {
+      "type": "string",
+      "minLength": 1
+    },
+    "license": {
+      "type": "string",
+      "minLength": 1
+    },
+    "permitted_uses": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "prohibited_uses": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clinical",
+        "institutional",
+        "certification"
+      ],
+      "properties": {
+        "clinical": {
+          "const": "none"
+        },
+        "institutional": {
+          "const": "none"
+        },
+        "certification": {
+          "const": "none"
+        }
+      }
+    },
+    "source_refs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+      }
+    },
+    "chunk_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

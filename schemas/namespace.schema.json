@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://commons.nurse-ai-os.org/schemas/namespace.schema.json",
+  "title": "NIN Knowledge Commons namespace record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "namespace_id",
+    "title",
+    "visibility",
+    "steward",
+    "eligible_lanes",
+    "data_ceiling",
+    "risk_ceiling",
+    "status",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1-draft"
+    },
+    "namespace_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "visibility": {
+      "enum": [
+        "public",
+        "partner",
+        "private",
+        "commercial"
+      ]
+    },
+    "steward": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "display_name",
+        "role"
+      ],
+      "properties": {
+        "display_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "locality": {
+      "type": "string",
+      "minLength": 1
+    },
+    "jurisdiction": {
+      "type": "string",
+      "minLength": 1
+    },
+    "eligible_lanes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "Learn",
+          "Practice",
+          "Lead",
+          "Build"
+        ]
+      }
+    },
+    "data_ceiling": {
+      "enum": [
+        "D0",
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ]
+    },
+    "risk_ceiling": {
+      "enum": [
+        "Green",
+        "Yellow",
+        "Orange",
+        "Red-E"
+      ]
+    },
+    "status": {
+      "enum": [
+        "proposed",
+        "approved",
+        "suspended",
+        "retired"
+      ]
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://commons.nurse-ai-os.org/schemas/entity.schema.json",
+  "title": "Registry graph entity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "entity_id",
+    "entity_type",
+    "label",
+    "pack_id",
+    "pack_version",
+    "candidate_digest",
+    "lifecycle_state"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1-draft"
+    },
+    "entity_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "entity_type": {
+      "enum": [
+        "pack",
+        "version",
+        "artifact",
+        "source-unit",
+        "source",
+        "creator",
+        "review",
+        "license",
+        "subject",
+        "language",
+        "namespace"
+      ]
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1
+    },
+    "pack_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "pack_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "candidate_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "lifecycle_state": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

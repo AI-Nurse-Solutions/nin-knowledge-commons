@@ -1,0 +1,16 @@
+schema_version: 0.1-draft
+namespace_id: nin.test.learn.ai-literacy
+title: Test public Learn namespace
+visibility: public
+steward:
+  display_name: Test Steward
+  role: fixture steward
+locality: Global
+jurisdiction: Educational; no institutional authority
+eligible_lanes:
+  - Learn
+data_ceiling: D0
+risk_ceiling: Green
+status: proposed
+limitations:
+  - Test fixture only; no authority or publication.

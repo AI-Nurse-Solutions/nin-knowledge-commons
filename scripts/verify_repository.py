@@ -3,10 +3,12 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import sys
 from pathlib import Path
+from typing import NoReturn
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,10 +30,36 @@ REQUIRED = (
     "catalog/entities.jsonl",
     "catalog/relations.jsonl",
     "governance/README.md",
+    "governance/decisions/KC-DEC-0001-first-reference-pack.md",
+    "governance/review-candidates/KC-RC-0001/FOUNDER-PREFLIGHT.md",
+    "governance/review-candidates/KC-RC-0001/REVIEW-BRIEF.md",
+    "governance/review-candidates/KC-RC-0001/candidate.json",
     "index.html",
+    "namespaces/nin.global.learn.ai-literacy.yaml",
     "packs/README.md",
+    "packs/learn/nin.global.learn.ai-literacy/v0.1.0-draft.1/CHECKSUMS.sha256",
+    "packs/learn/nin.global.learn.ai-literacy/v0.1.0-draft.1/manifest.yaml",
+    "requirements-dev.txt",
     "schemas/README.md",
+    "schemas/artifact.schema.json",
+    "schemas/catalog-entry.schema.json",
+    "schemas/chunk.schema.json",
+    "schemas/entity.schema.json",
+    "schemas/knowledge-pack.schema.json",
+    "schemas/namespace.schema.json",
+    "schemas/publication-decision.schema.json",
+    "schemas/relation.schema.json",
+    "schemas/review-record.schema.json",
+    "schemas/source-record.schema.json",
+    "tests/test_pack_pipeline.py",
+    "tools/build_pack.py",
+    "tools/build_schemas.py",
+    "tools/packlib.py",
+    "tools/search_index.py",
+    "tools/validate_pack.py",
 )
+
+FIRST_PACK = Path("packs/learn/nin.global.learn.ai-literacy/v0.1.0-draft.1")
 
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 HTML_LINK = re.compile(r"\b(?:href|src)=[\"']([^\"']+)[\"']", re.IGNORECASE)
@@ -45,7 +73,7 @@ SECRET_PATTERNS = {
 TEXT_SUFFIXES = {"", ".html", ".json", ".jsonl", ".md", ".py", ".txt", ".yml", ".yaml"}
 
 
-def fail(message: str) -> None:
+def fail(message: str) -> NoReturn:
     raise AssertionError(message)
 
 
@@ -140,6 +168,128 @@ def check_governance_contract() -> None:
             fail(f"stale incubator claim remains: {phrase}")
 
 
+def check_first_pack_decision() -> None:
+    decision = read("governance/decisions/KC-DEC-0001-first-reference-pack.md")
+    required_phrases = (
+        "Approved scope decision",
+        "AI Literacy Foundations for Nurses",
+        "| Language | English |",
+        "| Data class | D0 |",
+        "| EDENA risk tier | Green |",
+        "| Library lane | Learn |",
+        "stabilized and reviewed before any Tagalog edition is created",
+        "does **not**",
+        "Publication decision: not granted",
+        "Tagalog edition: held",
+    )
+    for phrase in required_phrases:
+        if phrase.lower() not in decision.lower():
+            fail(f"first Pack decision missing required boundary: {phrase}")
+
+
+def check_first_pack_candidate() -> None:
+    manifest = read((FIRST_PACK / "manifest.yaml").as_posix())
+    required_markers = (
+        "pack_id: nin.global.learn.ai-literacy",
+        "title: AI Literacy Foundations for Nurses",
+        "version: 0.1.0-draft.1",
+        "state: draft",
+        "data_class: D0",
+        "risk_tier: Green",
+        "review_status: not-reviewed",
+        "status: candidate-only",
+        "clinical: none",
+        "institutional: none",
+        "certification: none",
+        "translations: []",
+    )
+    for marker in required_markers:
+        if marker not in manifest:
+            fail(f"first Pack candidate missing fail-closed marker: {marker}")
+
+    expected_manifest = ROOT / FIRST_PACK / "manifest.yaml"
+    manifests = sorted((ROOT / "packs").rglob("manifest.yaml"))
+    if manifests != [expected_manifest]:
+        fail("Tagalog or another Pack manifest exists before the English candidate is reviewed")
+
+
+def check_first_pack_checksums() -> None:
+    pack = ROOT / FIRST_PACK
+    ledger_path = pack / "CHECKSUMS.sha256"
+    entries: dict[str, str] = {}
+    for line_number, line in enumerate(ledger_path.read_text(encoding="utf-8").splitlines(), start=1):
+        match = re.fullmatch(r"([0-9a-f]{64})  (.+)", line)
+        if not match:
+            fail(f"malformed first Pack checksum at line {line_number}")
+        digest, relative = match.groups()
+        path = (pack / relative).resolve()
+        if not path.is_relative_to(pack.resolve()) or not path.is_file():
+            fail(f"invalid first Pack checksum path: {relative}")
+        if relative == "CHECKSUMS.sha256" or relative in entries:
+            fail(f"invalid or duplicate first Pack checksum entry: {relative}")
+        actual_digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        if actual_digest != digest:
+            fail(f"first Pack checksum mismatch: {relative}")
+        entries[relative] = digest
+
+    expected = {
+        path.relative_to(pack).as_posix()
+        for path in pack.rglob("*")
+        if path.is_file() and path.name != "CHECKSUMS.sha256"
+    }
+    if set(entries) != expected:
+        fail(
+            "first Pack checksum inventory mismatch; "
+            f"missing={sorted(expected - set(entries))}, extra={sorted(set(entries) - expected)}"
+        )
+
+
+def check_founder_preflight() -> None:
+    candidate = json.loads(read("governance/review-candidates/KC-RC-0001/candidate.json"))
+    preflight = read("governance/review-candidates/KC-RC-0001/FOUNDER-PREFLIGHT.md")
+    review_brief = read("governance/review-candidates/KC-RC-0001/REVIEW-BRIEF.md")
+    ledger = (ROOT / FIRST_PACK / "CHECKSUMS.sha256").read_bytes()
+    digest = "sha256:" + hashlib.sha256(ledger).hexdigest()
+
+    if candidate.get("pack", {}).get("candidate_digest") != digest:
+        fail("founder-preflight candidate digest does not match the frozen Pack")
+    if candidate.get("pack", {}).get("content_digest") != digest:
+        fail("founder-preflight content digest does not match the frozen Pack")
+    founder = candidate.get("founder_preflight")
+    if not isinstance(founder, dict):
+        fail("candidate record lacks a founder-preflight disposition")
+    expected = {
+        "status": "proceed-to-independent-human-review",
+        "record": "governance/review-candidates/KC-RC-0001/FOUNDER-PREFLIGHT.md",
+        "review_sponsor": "Robert Domondon",
+        "performed_by": "Hermes, AI-assisted founder preflight",
+        "independent_human_review": False,
+        "review_only_pr_authorized": True,
+    }
+    for key, value in expected.items():
+        if founder.get(key) != value:
+            fail(f"founder-preflight candidate field mismatch: {key}")
+
+    approval_state = candidate.get("approval_state")
+    if not isinstance(approval_state, dict) or any(value is not False for value in approval_state.values()):
+        fail("review-only authorization must leave every approval state false")
+
+    required_phrases = (
+        digest,
+        "Proceed to a review-only commit and pull request for independent human review.",
+        "Hermes is not independent of the authoring process",
+        "does not accept the Pack",
+        "does not authorize merge",
+        "does not authorize deployment",
+        "published Pack count remains **0**",
+    )
+    for phrase in required_phrases:
+        if phrase not in preflight:
+            fail(f"founder preflight missing required boundary: {phrase}")
+    if digest not in review_brief:
+        fail("independent review brief is not bound to the founder-preflight digest")
+
+
 def check_public_page() -> None:
     html = read("index.html")
     required = (
@@ -177,6 +327,10 @@ def main() -> int:
         check_catalog()
         links = check_links()
         check_governance_contract()
+        check_first_pack_decision()
+        check_first_pack_candidate()
+        check_first_pack_checksums()
+        check_founder_preflight()
         check_public_page()
         scanned = check_sensitive_patterns()
     except (AssertionError, UnicodeDecodeError, json.JSONDecodeError) as exc:

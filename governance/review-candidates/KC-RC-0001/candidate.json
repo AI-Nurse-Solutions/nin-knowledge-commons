@@ -1,0 +1,81 @@
+{
+  "schema_version": "0.1-draft",
+  "candidate_id": "KC-RC-0001",
+  "status": "independent-review-requested",
+  "prepared_at": "2026-07-29T23:39:21Z",
+  "registry_epoch": 3,
+  "effective_lifecycle": "under-review",
+  "deny_override": "none",
+  "review_access": {
+    "authorized": true,
+    "mode": "local-exact-digest-review"
+  },
+  "founder_preflight": {
+    "status": "proceed-to-independent-human-review",
+    "recorded_at": "2026-07-29T23:49:38Z",
+    "record": "governance/review-candidates/KC-RC-0001/FOUNDER-PREFLIGHT.md",
+    "review_sponsor": "Robert Domondon",
+    "performed_by": "Hermes, AI-assisted founder preflight",
+    "independent_human_review": false,
+    "review_only_pr_authorized": true
+  },
+  "superseded_pre_review_digests": [
+    "sha256:c91bd0d93bc49f86e4e803f0719205f54ec579fd8269fc53cd28eba0963a9e5b",
+    "sha256:4af348948303c5d473bb245bdb11ee1c9097eda587108546468375046cde9278"
+  ],
+  "change_reason": "Late architecture and rights audits were reconciled before human review, then the complete staged-byte gate replaced fragile Markdown hard-break whitespace without changing educational meaning. The candidate was rebuilt and rebound after both changes.",
+  "pack": {
+    "pack_id": "nin.global.learn.ai-literacy",
+    "pack_version": "0.1.0-draft.1",
+    "candidate_digest": "sha256:fbe354b2a420f4de737cbfc3eb0e9c8d96e3bb4c7b280356b79cc23c1118927d",
+    "content_digest": "sha256:fbe354b2a420f4de737cbfc3eb0e9c8d96e3bb4c7b280356b79cc23c1118927d",
+    "digest_contract": "sha256-of-canonical-checksum-ledger-v1",
+    "path": "packs/learn/nin.global.learn.ai-literacy/v0.1.0-draft.1",
+    "checksum_ledger": "packs/learn/nin.global.learn.ai-literacy/v0.1.0-draft.1/CHECKSUMS.sha256",
+    "data_class": "D0",
+    "risk_tier": "Green",
+    "lane": "Learn",
+    "language": "en",
+    "clinical_authority": "none",
+    "institutional_authority": "none",
+    "certification_authority": "none"
+  },
+  "counts": {
+    "artifacts": 11,
+    "sources": 9,
+    "content_units": 11,
+    "derivative_chunks": 135,
+    "registry_entities": 37,
+    "registry_relations": 65
+  },
+  "deterministic_derivatives": {
+    "nin.global.learn.ai-literacy-0.1.0-draft.1.zip": "sha256:470cc01fb895ac23bf964d8fd2b2a78d1253398221951f641110894c1e08e789",
+    "catalog-entry.json": "sha256:aa1d4025cff6c582fa5aefc32742dad3be1a4a499ea1a3f7f51593f827c1a2a7",
+    "chunks.jsonl": "sha256:c0277a8f42e1ee28e8a2928fabbc4e5373d65635d747ac7e151bd17eda3ebc9f",
+    "entities.jsonl": "sha256:9d92cfc54b8141839f12bdb946ca4df76f5988cb989f7d3639e947557c7c9b56",
+    "relations.jsonl": "sha256:fb1be71dc62e940e168a93a2ca4c394ebbb1e22ca6848eba3da01c97995e338f"
+  },
+  "required_independent_reviews": [
+    "rights-and-provenance",
+    "EDENA-data-risk-action-and-authority",
+    "educational-quality-and-nursing-relevance",
+    "accessibility-and-plain-language",
+    "technical-integrity-and-retrieval",
+    "source-currency-and-claim-support"
+  ],
+  "approval_state": {
+    "schema_adopted": false,
+    "rights_reviewed": false,
+    "independent_review_complete": false,
+    "accepted_for_scope": false,
+    "publication_approved": false,
+    "catalog_inclusion_approved": false,
+    "translation_approved": false
+  },
+  "holds": [
+    "Do not edit the frozen candidate in place; revisions require a new digest and renewed review.",
+    "Do not add this candidate to the public catalog.",
+    "Do not describe the candidate as reviewed, published, certified, clinically validated, or institutionally authorized.",
+    "Do not create a Tagalog or other translation until an exact stable English release is independently reviewed and separately approved."
+  ]
+}

@@ -55,6 +55,34 @@ class KnowledgeCommonsRepositoryTests(unittest.TestCase):
         self.assertIn("will not install, authorize, or activate", safety)
         self.assertIn("approved sandbox", safety)
 
+    def test_first_pack_scope_is_approved_without_publication_or_translation(self) -> None:
+        decision = (ROOT / "governance/decisions/KC-DEC-0001-first-reference-pack.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("AI Literacy Foundations for Nurses", decision)
+        self.assertIn("| Language | English |", decision)
+        self.assertIn("| Data class | D0 |", decision)
+        self.assertIn("| EDENA risk tier | Green |", decision)
+        self.assertIn("| Library lane | Learn |", decision)
+        self.assertIn("Publication decision: not granted", decision)
+        self.assertIn("Tagalog edition: held", decision)
+        self.assertIn("stabilized and reviewed before any Tagalog edition is created", decision)
+
+    def test_founder_preflight_authorizes_only_independent_review_exposure(self) -> None:
+        preflight = (
+            ROOT / "governance/review-candidates/KC-RC-0001/FOUNDER-PREFLIGHT.md"
+        ).read_text(encoding="utf-8")
+        candidate = json.loads(
+            (ROOT / "governance/review-candidates/KC-RC-0001/candidate.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertIn("Proceed to a review-only commit and pull request", preflight)
+        self.assertIn("Hermes is not independent of the authoring process", preflight)
+        self.assertTrue(candidate["founder_preflight"]["review_only_pr_authorized"])
+        self.assertFalse(candidate["founder_preflight"]["independent_human_review"])
+        self.assertTrue(all(value is False for value in candidate["approval_state"].values()))
+
 
 if __name__ == "__main__":
     unittest.main()
