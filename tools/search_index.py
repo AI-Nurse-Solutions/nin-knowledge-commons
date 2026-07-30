@@ -87,8 +87,10 @@ def main() -> int:
             )
         if review_access.get("authorized") is not True or review_access.get("mode") != "local-exact-digest-review":
             raise ValueError("governance record does not authorize bounded local review access")
+        if "namespace" not in governed_pack:
+            raise ValueError("governance record does not declare an authorized namespace")
         expected_identity = (
-            governed_pack.get("namespace", governed_pack.get("pack_id")),
+            governed_pack.get("namespace"),
             governed_pack.get("pack_version"),
             governed_pack.get("candidate_digest"),
         )

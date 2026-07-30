@@ -11,9 +11,9 @@ This is a review request—not publication approval, schema adoption, certificat
 ```text
 Pack ID:           nin.global.learn.ai-literacy
 Version:           0.1.0-draft.1
-Candidate digest:  sha256:fbe354b2a420f4de737cbfc3eb0e9c8d96e3bb4c7b280356b79cc23c1118927d
+Candidate digest:  sha256:5f423157c79cd41b21a3b6b88a4dc6ec52b894b2de1c8da717352bfeb9329573
 Checksum ledger:   packs/learn/nin.global.learn.ai-literacy/v0.1.0-draft.1/CHECKSUMS.sha256
-Review ZIP digest: sha256:470cc01fb895ac23bf964d8fd2b2a78d1253398221951f641110894c1e08e789
+Review ZIP digest: sha256:fbdd7425d8214e54687b97dc402cab0365a994ae6e52cf6a41da1d40f4018b7c
 Data/risk/lane:    D0 / Green / Learn
 Language:          English
 Authority:         no clinical, institutional, or certification authority

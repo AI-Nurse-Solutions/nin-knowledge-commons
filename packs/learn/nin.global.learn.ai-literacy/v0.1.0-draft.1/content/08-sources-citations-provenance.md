@@ -84,13 +84,13 @@ candidate or release digest
 source record identifiers
 ```
 
-For this draft, an example citation shape is:
+The following is a pre-freeze citation template, not the binding for this review candidate:
 
 ```text
 nin.global.learn.ai-literacy@0.1.0-draft.1
 artifact.ai-literacy.sources
 Sources, citations, and provenance > Evaluate claim support
-candidate digest: pending until freeze
+candidate digest: <copy the bound sha256 digest from the candidate record>
 ```
 
 Do not cite a moving branch as though it were an immutable release.

@@ -20,6 +20,8 @@ SAFE_PATH = r"^(?!/)(?!.*\.\.)[^\\]+$"
 LANES = ["Learn", "Practice", "Lead", "Build"]
 DATA_CLASSES = ["D0", "D1", "D2", "D3", "D4"]
 RISK_TIERS = ["Green", "Yellow", "Orange", "Red-P", "Red-E"]
+# Red-P is prohibited and therefore cannot be a namespace risk ceiling.
+NAMESPACE_RISK_CEILINGS = [tier for tier in RISK_TIERS if tier != "Red-P"]
 ACTION_MODES = [
     "Observe",
     "Draft",
@@ -103,7 +105,7 @@ def schemas() -> dict[str, dict]:
             "jurisdiction": nonempty_string(),
             "eligible_lanes": enum_list(LANES),
             "data_ceiling": {"enum": DATA_CLASSES},
-            "risk_ceiling": {"enum": ["Green", "Yellow", "Orange", "Red-E"]},
+            "risk_ceiling": {"enum": NAMESPACE_RISK_CEILINGS},
             "status": {"enum": ["proposed", "approved", "suspended", "retired"]},
             "limitations": string_list(min_items=1),
         },

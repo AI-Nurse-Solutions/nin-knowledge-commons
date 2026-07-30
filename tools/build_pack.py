@@ -59,6 +59,8 @@ def split_sections(body: str) -> list[tuple[list[str], str]]:
 
     def flush() -> None:
         if current_path is None:
+            if "\n".join(current_lines).strip():
+                raise PackError("content before first Markdown heading is not permitted")
             return
         content = "\n".join(current_lines).strip()
         if content:
@@ -508,12 +510,12 @@ def build_archive(pack: Path, destination: Path, pack_id: str, version: str) -> 
             archive.writestr(info, path.read_bytes(), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
 
 
-def build(pack: Path, output: Path, sqlite_path: Path) -> dict[str, Any]:
+def build(pack: Path, output: Path, sqlite_path: Path, *, freeze: bool = False) -> dict[str, Any]:
     validate(pack, frozen=False)
-    candidate_digest = create_checksum_ledger(pack)
+    if freeze:
+        create_checksum_ledger(pack)
     frozen = validate(pack, frozen=True)
-    if frozen["candidate_digest"] != candidate_digest:
-        raise PackError("candidate digest changed between freeze and verification")
+    candidate_digest = frozen["candidate_digest"]
 
     manifest = load_yaml(pack / "manifest.yaml")
     manifest["_pack_path"] = str(pack)
@@ -524,6 +526,13 @@ def build(pack: Path, output: Path, sqlite_path: Path) -> dict[str, Any]:
     del manifest["_pack_path"]
 
     if output.exists():
+        repository_root = Path(__file__).resolve().parents[1]
+        if (
+            output in {repository_root, Path.cwd().resolve(), pack}
+            or output in pack.parents
+            or pack in output.parents
+        ):
+            raise PackError(f"refusing to replace unsafe output path: {output}")
         shutil.rmtree(output)
     output.mkdir(parents=True)
     write_jsonl(output / "chunks.jsonl", chunks)
@@ -584,9 +593,19 @@ def main() -> int:
     parser.add_argument("pack", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--sqlite", type=Path, required=True)
+    parser.add_argument(
+        "--freeze",
+        action="store_true",
+        help="create or replace CHECKSUMS.sha256 before building; default is read-only frozen verification",
+    )
     args = parser.parse_args()
     try:
-        result = build(args.pack.resolve(), args.output.resolve(), args.sqlite.resolve())
+        result = build(
+            args.pack.resolve(),
+            args.output.resolve(),
+            args.sqlite.resolve(),
+            freeze=args.freeze,
+        )
     except (PackError, OSError, sqlite3.Error) as exc:
         print(f"FAIL: {exc}", file=sys.stderr)
         return 1

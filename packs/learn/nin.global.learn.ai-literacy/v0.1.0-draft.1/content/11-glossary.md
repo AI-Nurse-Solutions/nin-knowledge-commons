@@ -68,7 +68,7 @@ A pointer to a source. A citation must be checked before it is treated as eviden
 
 ### Content unit
 
-A stable, indexable section of an authoritative artifact. A content unit retains the Pack ID, version, artifact ID, section path, source references, and digest needed for citation.
+A stable, indexable section of a declared artifact. A content unit retains the Pack ID, version, artifact ID, section path, source references, and digest needed for citation.
 
 ### D0
 
@@ -100,7 +100,7 @@ Substantive inspection by a person with suitable competence, context, time, and 
 
 ### Knowledge Pack
 
-A portable, versioned package containing authoritative content, metadata, rights, provenance, lifecycle information, and review records. Search indexes are derived from it.
+A portable, versioned package containing governed content, metadata, rights, provenance, lifecycle information, and review records. Search indexes are derived from it.
 
 ### Language model
 

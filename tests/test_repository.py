@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+import sys
 import unittest
 from pathlib import Path
 
@@ -14,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class KnowledgeCommonsRepositoryTests(unittest.TestCase):
     def test_repository_verifier_passes(self) -> None:
         result = subprocess.run(
-            ["python3", "scripts/verify_repository.py"],
+            [sys.executable, "scripts/verify_repository.py"],
             cwd=ROOT,
             check=False,
             capture_output=True,
@@ -81,7 +82,9 @@ class KnowledgeCommonsRepositoryTests(unittest.TestCase):
         self.assertIn("Hermes is not independent of the authoring process", preflight)
         self.assertTrue(candidate["founder_preflight"]["review_only_pr_authorized"])
         self.assertFalse(candidate["founder_preflight"]["independent_human_review"])
-        self.assertTrue(all(value is False for value in candidate["approval_state"].values()))
+        approval_state = candidate["approval_state"]
+        self.assertTrue(approval_state)
+        self.assertTrue(all(value is False for value in approval_state.values()))
 
 
 if __name__ == "__main__":

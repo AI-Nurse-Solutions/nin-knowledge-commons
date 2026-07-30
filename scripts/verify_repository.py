@@ -218,12 +218,15 @@ def check_first_pack_checksums() -> None:
     ledger_path = pack / "CHECKSUMS.sha256"
     entries: dict[str, str] = {}
     for line_number, line in enumerate(ledger_path.read_text(encoding="utf-8").splitlines(), start=1):
+        if not line.strip():
+            continue
         match = re.fullmatch(r"([0-9a-f]{64})  (.+)", line)
         if not match:
             fail(f"malformed first Pack checksum at line {line_number}")
         digest, relative = match.groups()
-        path = (pack / relative).resolve()
-        if not path.is_relative_to(pack.resolve()) or not path.is_file():
+        unresolved_path = pack / relative
+        path = unresolved_path.resolve()
+        if unresolved_path.is_symlink() or not path.is_relative_to(pack.resolve()) or not path.is_file():
             fail(f"invalid first Pack checksum path: {relative}")
         if relative == "CHECKSUMS.sha256" or relative in entries:
             fail(f"invalid or duplicate first Pack checksum entry: {relative}")
@@ -235,7 +238,7 @@ def check_first_pack_checksums() -> None:
     expected = {
         path.relative_to(pack).as_posix()
         for path in pack.rglob("*")
-        if path.is_file() and path.name != "CHECKSUMS.sha256"
+        if path.is_file() and not path.is_symlink() and path.name != "CHECKSUMS.sha256"
     }
     if set(entries) != expected:
         fail(
@@ -255,6 +258,17 @@ def check_founder_preflight() -> None:
         fail("founder-preflight candidate digest does not match the frozen Pack")
     if candidate.get("pack", {}).get("content_digest") != digest:
         fail("founder-preflight content digest does not match the frozen Pack")
+    derivatives = candidate.get("deterministic_derivatives")
+    if not isinstance(derivatives, dict):
+        fail("candidate record lacks deterministic derivative bindings")
+    zip_digests = [
+        value
+        for name, value in derivatives.items()
+        if isinstance(name, str) and name.endswith(".zip")
+    ]
+    if len(zip_digests) != 1 or not re.fullmatch(r"sha256:[0-9a-f]{64}", zip_digests[0]):
+        fail("candidate record must declare exactly one valid review ZIP digest")
+    review_zip_digest = zip_digests[0]
     founder = candidate.get("founder_preflight")
     if not isinstance(founder, dict):
         fail("candidate record lacks a founder-preflight disposition")
@@ -271,7 +285,11 @@ def check_founder_preflight() -> None:
             fail(f"founder-preflight candidate field mismatch: {key}")
 
     approval_state = candidate.get("approval_state")
-    if not isinstance(approval_state, dict) or any(value is not False for value in approval_state.values()):
+    if (
+        not isinstance(approval_state, dict)
+        or not approval_state
+        or any(value is not False for value in approval_state.values())
+    ):
         fail("review-only authorization must leave every approval state false")
 
     required_phrases = (
@@ -286,8 +304,12 @@ def check_founder_preflight() -> None:
     for phrase in required_phrases:
         if phrase not in preflight:
             fail(f"founder preflight missing required boundary: {phrase}")
+    if review_zip_digest not in preflight:
+        fail("founder preflight is not bound to the candidate review ZIP digest")
     if digest not in review_brief:
         fail("independent review brief is not bound to the founder-preflight digest")
+    if review_zip_digest not in review_brief:
+        fail("independent review brief is not bound to the candidate review ZIP digest")
 
 
 def check_public_page() -> None:

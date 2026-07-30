@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import shutil
 import subprocess
 import sys
@@ -12,6 +13,7 @@ import unittest
 from pathlib import Path
 
 import yaml
+from jsonschema import Draft202012Validator, FormatChecker
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE = ROOT / "tests/fixtures/packs/valid-draft"
@@ -33,6 +35,14 @@ class DraftPackPipelineTests(unittest.TestCase):
     def copied_fixture(self, temporary: str) -> Path:
         destination = Path(temporary) / "pack"
         shutil.copytree(FIXTURE, destination)
+        files = sorted(
+            path for path in destination.rglob("*") if path.is_file() and path.name != "CHECKSUMS.sha256"
+        )
+        ledger = "\n".join(
+            f"{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.relative_to(destination).as_posix()}"
+            for path in files
+        )
+        (destination / "CHECKSUMS.sha256").write_text(ledger + "\n", encoding="utf-8")
         return destination
 
     def governance_record(
@@ -55,6 +65,7 @@ class DraftPackPipelineTests(unittest.TestCase):
             },
             "pack": {
                 "pack_id": build_manifest["pack_id"],
+                "namespace": build_manifest["pack_id"],
                 "pack_version": build_manifest["pack_version"],
                 "candidate_digest": digest,
             },
@@ -84,6 +95,22 @@ class DraftPackPipelineTests(unittest.TestCase):
         for path in sorted((ROOT / "schemas").glob("*.schema.json")):
             schema = json.loads(path.read_text(encoding="utf-8"))
             self.assertEqual(schema["$schema"], "https://json-schema.org/draft/2020-12/schema")
+
+        namespace = json.loads((ROOT / "schemas/namespace.schema.json").read_text(encoding="utf-8"))
+        risk_ceilings = namespace["properties"]["risk_ceiling"]["enum"]
+        self.assertNotIn("Red-P", risk_ceilings)
+        self.assertEqual(risk_ceilings, ["Green", "Yellow", "Orange", "Red-E"])
+
+    def test_required_schema_formats_are_actively_checked(self) -> None:
+        checker = FormatChecker()
+        date_validator = Draft202012Validator(
+            {"type": "string", "format": "date-time"}, format_checker=checker
+        )
+        uri_validator = Draft202012Validator(
+            {"type": "string", "format": "uri"}, format_checker=checker
+        )
+        self.assertTrue(list(date_validator.iter_errors("not-a-date-time")))
+        self.assertTrue(list(uri_validator.iter_errors("not a uri")))
 
     def test_valid_unpublished_draft_passes_source_validation(self) -> None:
         result = self.run_validator(FIXTURE)
@@ -230,6 +257,64 @@ class DraftPackPipelineTests(unittest.TestCase):
                 self.assertIn(relation["source_entity_id"], entity_ids)
                 self.assertIn(relation["target_entity_id"], entity_ids)
 
+    def test_derivative_build_rejects_body_text_before_first_heading(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            pack = self.copied_fixture(temporary)
+            artifact = pack / "content/01-orientation.md"
+            text = artifact.read_text(encoding="utf-8")
+            artifact.write_text(
+                text.replace("\n---\n\n#", "\n---\n\nDiscarded preamble.\n\n#", 1),
+                encoding="utf-8",
+            )
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    "tools/build_pack.py",
+                    str(pack),
+                    "--output",
+                    str(Path(temporary) / "derivatives"),
+                    "--sqlite",
+                    str(Path(temporary) / "index/commons.sqlite"),
+                    "--freeze",
+                ],
+                cwd=ROOT,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("content before first Markdown heading", result.stderr)
+
+    def test_default_derivative_build_never_rewrites_frozen_ledger(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            pack = root / "pack"
+            shutil.copytree(ACTUAL_PACK, pack)
+            ledger = pack / "CHECKSUMS.sha256"
+            before = ledger.read_bytes()
+            artifact = pack / "content/01-orientation.md"
+            artifact.write_text(
+                artifact.read_text(encoding="utf-8") + "\nUnfrozen drift.\n",
+                encoding="utf-8",
+            )
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    "tools/build_pack.py",
+                    str(pack),
+                    "--output",
+                    str(root / "derivatives"),
+                    "--sqlite",
+                    str(root / "index/commons.sqlite"),
+                ],
+                cwd=ROOT,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertEqual(ledger.read_bytes(), before)
+
     def test_actual_review_candidate_is_exactly_bound_and_reproducible(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -291,6 +376,7 @@ class DraftPackPipelineTests(unittest.TestCase):
             self.assertFalse(manifest["public_catalog_modified"])
             self.assertEqual(manifest["counts"]["content_units"], 11)
             self.assertEqual(manifest["counts"]["sources"], 9)
+            self.assertTrue(candidate["approval_state"])
             self.assertTrue(all(value is False for value in candidate["approval_state"].values()))
 
     def test_search_fails_closed_without_candidate_authorization(self) -> None:
@@ -350,6 +436,21 @@ class DraftPackPipelineTests(unittest.TestCase):
             self.assertEqual(citation["candidate_digest"], payload["candidate_digest"])
             self.assertEqual(citation["content_unit_id"], "unit.test.orientation")
             self.assertTrue(citation["citation_locator"].endswith("#unit.test.orientation"))
+
+            governance = json.loads(governance_record.read_text(encoding="utf-8"))
+            del governance["pack"]["namespace"]
+            governance_record.write_text(json.dumps(governance), encoding="utf-8")
+            missing_namespace = subprocess.run(
+                base + ["--allow-review-candidate"],
+                cwd=ROOT,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(missing_namespace.returncode, 3)
+            self.assertIn("does not declare an authorized namespace", missing_namespace.stderr)
+            governance["pack"]["namespace"] = "nin.test.learn.ai-literacy"
+            governance_record.write_text(json.dumps(governance), encoding="utf-8")
 
             wrong_namespace = subprocess.run(
                 [part if part != "nin.test.learn.ai-literacy" else "nin.unauthorized" for part in base]

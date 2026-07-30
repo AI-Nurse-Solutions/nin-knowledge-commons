@@ -2,9 +2,9 @@
 title: "KC-RC-0001: Founder preflight for independent human review"
 status: "Proceed to independent human review"
 version: "1.0"
-recorded_at: "2026-07-29T23:49:38Z"
-candidate_digest: "sha256:fbe354b2a420f4de737cbfc3eb0e9c8d96e3bb4c7b280356b79cc23c1118927d"
-review_zip_digest: "sha256:470cc01fb895ac23bf964d8fd2b2a78d1253398221951f641110894c1e08e789"
+recorded_at: "2026-07-30T05:22:14Z"
+candidate_digest: "sha256:5f423157c79cd41b21a3b6b88a4dc6ec52b894b2de1c8da717352bfeb9329573"
+review_zip_digest: "sha256:fbdd7425d8214e54687b97dc402cab0365a994ae6e52cf6a41da1d40f4018b7c"
 ---
 
 # KC-RC-0001 founder preflight
@@ -41,10 +41,17 @@ It does not authorize merge. It does not authorize deployment.
 
 ### Remediated before authorization
 
-1. **P2 — fragile Markdown hard-break whitespace.** The complete staged-byte gate found six trailing-space line breaks in two knowledge checks. They were replaced with blank-line-separated choices. This superseded `sha256:4af348948303c5d473bb245bdb11ee1c9097eda587108546468375046cde9278` and produced the exact candidate reviewed here.
+1. **P2 — fragile Markdown hard-break whitespace.** The complete staged-byte gate found six trailing-space line breaks in two knowledge checks. They were replaced with blank-line-separated choices. This superseded `sha256:4af348948303c5d473bb245bdb11ee1c9097eda587108546468375046cde9278` and produced the prior `sha256:fbe354b2a420f4de737cbfc3eb0e9c8d96e3bb4c7b280356b79cc23c1118927d` candidate.
 2. **P2 — actual candidate absent from explicit CI reproduction.** Pull-request CI previously relied on repository checks and fixture-based pipeline tests. CI now regenerates schema proposals, checks schema drift, frozen-validates the actual Pack, and runs an exact-candidate two-directory reproduction test.
 3. **P2 — isolated tests could escape through literal `python3`.** Pipeline tests now use `sys.executable`, so subprocess validation and builds remain inside the interpreter running the suite.
 4. **P3 — review ZIP digest formatting differed across records.** The review brief now uses the same canonical `sha256:<hex>` form as the candidate record.
+5. **P2 — review-candidate prose blurred draft lifecycle boundaries.** The citation example is now explicitly a pre-freeze template, and glossary definitions use declared/governed rather than authoritative content language.
+6. **P2 — derivative builds silently replaced the frozen checksum ledger.** Builders now verify existing ledgers by default and require explicit `--freeze` authority to create or replace one; drift fails without mutating the Pack.
+7. **P2 — leading body prose could be omitted from derivatives.** Non-empty content before the first Markdown heading now fails closed and has adversarial regression coverage.
+8. **P2 — candidate search accepted `pack_id` as an implicit namespace.** External governance must now declare the authorized namespace explicitly; pack-ID-only records abstain before SQLite opens.
+9. **P2 — JSON Schema format checks depended on unpinned optional validators.** RFC 3339 and RFC 3986 validators are pinned, and regression tests prove malformed date-time and URI values are rejected.
+10. **P3 — repository verification had checksum and governance-binding gaps.** Blank checksum lines and symlinks now follow the Pack validator contract; review ZIP declarations are cross-bound; empty approval-state evidence is rejected.
+11. **P3 — namespace risk-ceiling vocabulary was hand-copied.** The schema now derives ceiling-eligible tiers from the shared vocabulary while explicitly preserving the EDENA prohibition on `Red-P`.
 
 ### Open limitations carried to independent review
 
@@ -56,9 +63,9 @@ It does not authorize merge. It does not authorize deployment.
 
 ## Verification evidence
 
-- Frozen validator: **PASS**, exact candidate `sha256:fbe354b2a420f4de737cbfc3eb0e9c8d96e3bb4c7b280356b79cc23c1118927d`.
+- Frozen validator: **PASS**, exact candidate `sha256:5f423157c79cd41b21a3b6b88a4dc6ec52b894b2de1c8da717352bfeb9329573`.
 - Isolated dependency environment: **PASS**; imports resolved inside `/tmp/nin-kc-isolated-verify-venv` with inherited `PYTHONPATH` removed.
-- Full regression suite: **21/21 PASS**.
+- Full regression suite: **24/24 PASS**.
 - Schema proposals: **10 generated and meta-valid**; not adopted.
 - Cross-directory deterministic comparison: **PASS** for build manifest, catalog entry, chunks, entities, relations, review ZIP, and shard lock.
 - Review ZIP: **19 safe regular-file members**, fixed ZIP timestamp, no absolute/traversal paths or symlinks.
