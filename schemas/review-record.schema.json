@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://commons.nurse-ai-os.org/schemas/review-record.schema.json",
+  "title": "Knowledge Pack review record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "review_id",
+    "pack_id",
+    "pack_version",
+    "candidate_digest",
+    "review_type",
+    "reviewer",
+    "scope",
+    "materials_inspected",
+    "findings",
+    "limitations",
+    "decision",
+    "reviewed_at",
+    "re_review_required"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1-draft"
+    },
+    "review_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "pack_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "pack_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "candidate_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "review_type": {
+      "enum": [
+        "rights-provenance",
+        "edena-data-action",
+        "educational-quality",
+        "accessibility",
+        "technical-integrity",
+        "localization",
+        "publication"
+      ]
+    },
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "display_name",
+        "role",
+        "declared_competence",
+        "independent_of_author"
+      ],
+      "properties": {
+        "display_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "declared_competence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "independent_of_author": {
+          "type": "boolean"
+        }
+      }
+    },
+    "scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "materials_inspected": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "decision": {
+      "enum": [
+        "approve",
+        "revise",
+        "reject",
+        "defer"
+      ]
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "review_due": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "re_review_required": {
+      "type": "boolean"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+schema_version: 0.1-draft
+namespace_id: nin.global.learn.ai-literacy
+title: NIN global AI literacy Learn namespace
+visibility: public
+steward:
+  display_name: Robert Domondon
+  role: founder/accountable steward
+locality: Global English-language reference
+jurisdiction: Educational reference; no institutional or clinical authority
+eligible_lanes:
+  - Learn
+data_ceiling: D0
+risk_ceiling: Green
+status: proposed
+limitations:
+  - The namespace has no institutional, accreditation, certification, or clinical authority.
+  - Only public, rights-clear, no-PHI educational content is eligible.
+  - Publication remains a separate exact-digest founder decision.

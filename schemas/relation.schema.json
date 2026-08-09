@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://commons.nurse-ai-os.org/schemas/relation.schema.json",
+  "title": "Registry graph relation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "relation_id",
+    "source_entity_id",
+    "predicate",
+    "target_entity_id",
+    "pack_id",
+    "pack_version",
+    "candidate_digest",
+    "provenance",
+    "review_status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1-draft"
+    },
+    "relation_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "source_entity_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "predicate": {
+      "enum": [
+        "HAS_VERSION",
+        "CONTAINS_ARTIFACT",
+        "CONTAINS_UNIT",
+        "CITES",
+        "CREATED_BY",
+        "REVIEWED_BY",
+        "LICENSED_UNDER",
+        "TRANSLATION_OF",
+        "DERIVED_FROM",
+        "SUPERSEDES",
+        "IN_NAMESPACE",
+        "IN_LANGUAGE"
+      ]
+    },
+    "target_entity_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "pack_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "pack_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "candidate_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "provenance": {
+      "enum": [
+        "manifest",
+        "artifact-front-matter",
+        "source-ledger",
+        "review-record",
+        "human-curated"
+      ]
+    },
+    "review_status": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

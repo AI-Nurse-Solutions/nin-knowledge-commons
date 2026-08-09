@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://commons.nurse-ai-os.org/schemas/source-record.schema.json",
+  "title": "Knowledge Pack source record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_id",
+    "title",
+    "creator",
+    "publisher",
+    "publication_date",
+    "url",
+    "source_type",
+    "reuse_status",
+    "use_in_pack",
+    "verified_at",
+    "claims_supported",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1-draft"
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "creator": {
+      "type": "string",
+      "minLength": 1
+    },
+    "publisher": {
+      "type": "string",
+      "minLength": 1
+    },
+    "publication_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^\\d{4}(?:-\\d{2}-\\d{2})?$"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "source_type": {
+      "enum": [
+        "framework",
+        "guidance",
+        "regulation-summary",
+        "professional-guidance",
+        "position-statement",
+        "project-doctrine",
+        "project-playbook",
+        "research",
+        "web-page"
+      ]
+    },
+    "identifier": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "license": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reuse_status": {
+      "enum": [
+        "original-project-source",
+        "public-domain-or-government-work",
+        "open-license",
+        "citation-only",
+        "rights-unclear"
+      ]
+    },
+    "use_in_pack": {
+      "enum": [
+        "original-synthesis-and-citation",
+        "citation-only",
+        "adaptation-with-attribution"
+      ]
+    },
+    "verified_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "claims_supported": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

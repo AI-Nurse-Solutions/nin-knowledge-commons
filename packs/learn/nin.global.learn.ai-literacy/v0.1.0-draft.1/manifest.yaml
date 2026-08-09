@@ -1,0 +1,143 @@
+schema_version: 0.1-draft
+pack_id: nin.global.learn.ai-literacy
+namespace: nin.global.learn.ai-literacy
+title: AI Literacy Foundations for Nurses
+version: 0.1.0-draft.1
+state: draft
+lane: Learn
+role: reference-pack
+language: en
+data_class: D0
+risk_tier: Green
+action_modes:
+  - Observe
+  - Draft
+description: A foundational, non-clinical introduction to using and evaluating AI with privacy, evidence, human judgment, and nursing stewardship in view.
+intended_audiences:
+  - student-nurse
+  - staff-nurse
+  - nurse-educator
+  - nurse-leader
+  - nurse-informaticist
+permitted_uses:
+  - Build foundational vocabulary for discussing AI and generative AI.
+  - Practice evaluating AI outputs, uncertainty, sources, privacy, and bias.
+  - Support no-PHI educational reflection and drafting with human review.
+prohibited_uses:
+  - Patient-specific guidance, diagnosis, treatment, triage, monitoring, or clinical decision support.
+  - Replacement of professional judgment, institutional policy, faculty assessment, or legal advice.
+  - Entry of PHI, private learner records, confidential employer material, credentials, or secrets.
+  - Autonomous action, tool use, external communication, or changes to practice.
+authority:
+  clinical: none
+  institutional: none
+  certification: none
+locality: Global English-language reference
+jurisdiction: Educational reference; users must follow applicable local law, policy, and professional standards
+creator:
+  display_name: Robert Domondon
+  role: nurse author and accountable founder
+  rights_holder: Robert Domondon
+publisher:
+  display_name: NIN Knowledge Commons
+  status: candidate-only
+license:
+  spdx_id: CC-BY-4.0
+  path: LICENSE
+rights_status: draft-rights-review-pending
+artifacts:
+  - artifact_id: artifact.ai-literacy.orientation
+    content_unit_id: unit.ai-literacy.orientation
+    path: content/01-orientation.md
+    title: Orientation and boundaries
+    artifact_type: orientation
+    language: en
+  - artifact_id: artifact.ai-literacy.how-ai-works
+    content_unit_id: unit.ai-literacy.how-ai-works
+    path: content/02-how-ai-works.md
+    title: How AI and generative AI work
+    artifact_type: lesson
+    language: en
+  - artifact_id: artifact.ai-literacy.uncertainty
+    content_unit_id: unit.ai-literacy.uncertainty
+    path: content/03-strengths-limitations-uncertainty.md
+    title: Strengths, limitations, and uncertainty
+    artifact_type: lesson
+    language: en
+  - artifact_id: artifact.ai-literacy.privacy
+    content_unit_id: unit.ai-literacy.privacy
+    path: content/04-privacy-no-phi.md
+    title: Privacy and the no-PHI boundary
+    artifact_type: lesson
+    language: en
+  - artifact_id: artifact.ai-literacy.bias
+    content_unit_id: unit.ai-literacy.bias
+    path: content/05-bias-equity-context.md
+    title: Bias, equity, and context
+    artifact_type: lesson
+    language: en
+  - artifact_id: artifact.ai-literacy.human-judgment
+    content_unit_id: unit.ai-literacy.human-judgment
+    path: content/06-human-judgment-accountability.md
+    title: Human judgment and accountability
+    artifact_type: lesson
+    language: en
+  - artifact_id: artifact.ai-literacy.safe-use
+    content_unit_id: unit.ai-literacy.safe-use
+    path: content/07-safe-prompt-output-review.md
+    title: Safe prompting and output review
+    artifact_type: lesson
+    language: en
+  - artifact_id: artifact.ai-literacy.sources
+    content_unit_id: unit.ai-literacy.sources
+    path: content/08-sources-citations-provenance.md
+    title: Sources, citations, and provenance
+    artifact_type: lesson
+    language: en
+  - artifact_id: artifact.ai-literacy.stop
+    content_unit_id: unit.ai-literacy.stop
+    path: content/09-when-not-to-use-ai.md
+    title: When not to use AI
+    artifact_type: lesson
+    language: en
+  - artifact_id: artifact.ai-literacy.practice
+    content_unit_id: unit.ai-literacy.practice
+    path: content/10-practice-exercises.md
+    title: Synthetic practice exercises
+    artifact_type: practice-exercise
+    language: en
+  - artifact_id: artifact.ai-literacy.glossary
+    content_unit_id: unit.ai-literacy.glossary
+    path: content/11-glossary.md
+    title: Plain-language glossary
+    artifact_type: glossary
+    language: en
+sources_path: sources/sources.jsonl
+review_status: not-reviewed
+review_records: []
+ai_disclosure:
+  used: true
+  purposes:
+    - Draft schema, source-ledger, lesson, exercise, and derivative-generation assistance.
+    - Mechanical consistency, privacy-pattern, citation, and integrity checks.
+  human_verification_status: pending
+limitations:
+  - This is an AI-assisted English draft awaiting rights, educational, accessibility, nursing, and governance review.
+  - It is not clinical guidance, institutional policy, legal advice, certification, or a competency determination.
+  - AI systems, laws, organizational policies, and product behavior change; readers must verify current authoritative sources.
+  - Passing automated checks does not establish accuracy, completeness, safety, or authority.
+lifecycle:
+  created_at: '2026-07-29T22:14:12Z'
+  published_at: null
+  supersedes: null
+  retirement_notice: null
+  recall_notice: null
+relationships:
+  translations: []
+  derived_from: []
+  prerequisites: []
+  related_packs: []
+integrity:
+  algorithm: sha256
+  checksums_path: CHECKSUMS.sha256
+  candidate_digest: null

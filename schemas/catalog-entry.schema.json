@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://commons.nurse-ai-os.org/schemas/catalog-entry.schema.json",
+  "title": "Knowledge Pack catalog projection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "projection_status",
+    "pack_id",
+    "version",
+    "candidate_digest",
+    "namespace",
+    "title",
+    "description",
+    "lane",
+    "language",
+    "data_class",
+    "risk_tier",
+    "state",
+    "review_status",
+    "license",
+    "rights_status",
+    "publisher_status",
+    "action_modes",
+    "permitted_uses",
+    "prohibited_uses",
+    "authority",
+    "intended_audiences",
+    "limitations",
+    "source_count",
+    "artifact_count"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1-draft"
+    },
+    "projection_status": {
+      "enum": [
+        "review-candidate",
+        "published"
+      ]
+    },
+    "pack_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "candidate_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "namespace": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "lane": {
+      "enum": [
+        "Learn",
+        "Practice",
+        "Lead",
+        "Build"
+      ]
+    },
+    "language": {
+      "type": "string",
+      "minLength": 1
+    },
+    "data_class": {
+      "enum": [
+        "D0",
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ]
+    },
+    "risk_tier": {
+      "enum": [
+        "Green",
+        "Yellow",
+        "Orange",
+        "Red-P",
+        "Red-E"
+      ]
+    },
+    "state": {
+      "type": "string",
+      "minLength": 1
+    },
+    "review_status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "license": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rights_status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "publisher_status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action_modes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "Observe",
+          "Draft",
+          "Recommend",
+          "Prepare Action",
+          "Act With Approval",
+          "Constrained Autonomy"
+        ]
+      }
+    },
+    "permitted_uses": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "prohibited_uses": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clinical",
+        "institutional",
+        "certification"
+      ],
+      "properties": {
+        "clinical": {
+          "const": "none"
+        },
+        "institutional": {
+          "const": "none"
+        },
+        "certification": {
+          "const": "none"
+        }
+      }
+    },
+    "intended_audiences": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "source_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "artifact_count": {
+      "type": "integer",
+      "minimum": 1
+    }
+  }
+}

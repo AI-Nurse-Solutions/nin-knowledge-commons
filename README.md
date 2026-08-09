@@ -1,6 +1,6 @@
 # NIN Knowledge Commons
 
-> **Status: public repository scaffold and proposed doctrine, version 0.1.** The catalog is empty. No Knowledge Packs are published. No reviewer council, hosted retrieval service, marketplace, institutional authorization, clinical validation, or PHI-capable environment is operational through this repository.
+> **Status: public repository scaffold, proposed doctrine, and first English review candidate, version 0.1.** The public catalog is empty. No Knowledge Packs are published. Draft schemas and local validation/rebuild tools are not canonical adoption, independent review, hosted retrieval, institutional authorization, clinical validation, or a PHI-capable environment.
 
 The **NIN Knowledge Commons** is the proposed public catalog for the **Nurse AI OS Knowledge Fabric**: one federated fabric distributed as portable, versioned Knowledge Packs and discovered through a thin shared registry.
 
@@ -41,12 +41,19 @@ Implemented in this first repository baseline:
 - an accessible static catalog holding page;
 - empty portable catalog, entity, and relation projections;
 - public contribution, governance, safety, and security boundaries;
-- deterministic repository verification and CI.
+- deterministic repository verification and CI;
+- ten draft JSON Schema proposals plus adversarial fixtures, including a separate external publication-decision contract;
+- a fail-closed draft Pack validator and exact checksum freeze;
+- a D0/Green English `AI Literacy Foundations for Nurses v0.1.0-draft.1` review candidate;
+- deterministic local chunk, candidate-catalog, registry/provenance graph, and SQLite/FTS5 builds;
+- fail-closed local candidate search requiring an exact namespace/version/digest, an external review-governance record, and a matching shard lock before SQLite is opened.
 
 Not implemented or activated:
 
-- a canonical Knowledge Pack schema or validator;
+- canonical adoption of the draft schema proposals;
 - accepted or published Knowledge Packs;
+- independent rights, educational, accessibility, nursing, governance, and publication review of the English candidate;
+- any Tagalog or other translation of the moving English draft;
 - contributor intake or reviewer authority;
 - package signing or release automation;
 - hosted search, vector retrieval, graph traversal, or RAG;
@@ -71,10 +78,13 @@ Designed, documented, implemented, tested, committed, deployed, and live-verifie
 │   ├── entities.jsonl
 │   └── relations.jsonl
 ├── governance/
+├── namespaces/
 ├── packs/
 ├── schemas/
 ├── scripts/
 ├── tests/
+├── tools/
+├── requirements-dev.txt
 └── index.html
 ```
 
@@ -83,11 +93,13 @@ The catalog and graph files are rebuildable projections. Future versioned Knowle
 ## Local verification
 
 ```bash
-python3 scripts/verify_repository.py
-python3 -m unittest discover -s tests -v
+python3 -m venv .venv
+.venv/bin/python -m pip install --no-deps --requirement requirements-dev.txt
+.venv/bin/python scripts/verify_repository.py
+.venv/bin/python -m unittest discover -s tests -v
 ```
 
-The verifier checks required files, the exact custom-domain declaration, JSON/JSONL validity, repository-contained links, empty-catalog honesty, core governance language, and common secret/identifier patterns.
+The repository verifier checks required files, the exact custom-domain declaration, JSON/JSONL validity, repository-contained links, empty-catalog honesty, core governance language, and common secret/identifier patterns. Pack tooling additionally checks draft schemas, source references, public-safety patterns, exact checksums, explicit durable source-unit IDs, disposable chunk provenance, lifecycle exclusion, and exact-digest candidate-search authorization from an external governance record.
 
 ## Planned publication domains
 
